@@ -7,6 +7,9 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Image,
+  StatusBar,
+  LayoutAnimation,
 } from "react-native";
 import { merge } from "ramda";
 import TextInputField from "../components/TextInputField";
@@ -28,8 +31,23 @@ export default function LoginScreen({ navigation }) {
       .finally(() => setIsLoading(false));
   };
 
+  LayoutAnimation.easeInEaseOut();
+
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
+      <Image
+        source={require("../assets/authHeader.png")}
+        style={styles.headerImage}
+      />
+      <Image
+        source={require("../assets/authFooter.png")}
+        style={styles.footerImage}
+      />
+      <Image
+        source={require("../assets/loginLogo.png")}
+        style={styles.loginLogo}
+      />
       <Text style={styles.greeting}>Hello again.{`\r\n`} Wellcome back.</Text>
       <View style={styles.error}>
         {errorMessage && (
@@ -74,7 +92,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   greeting: {
-    marginTop: 32,
+    marginTop: -16,
     fontSize: 18,
     fontWeight: "400",
     textAlign: "center",
@@ -92,6 +110,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   form: {
+    marginTop: -32,
     marginBottom: 48,
     marginHorizontal: 30,
   },
@@ -131,5 +150,18 @@ const styles = StyleSheet.create({
   signUpText: {
     fontWeight: "500",
     color: "#e9446a",
+  },
+  headerImage: {
+    marginTop: -216,
+    marginLeft: -50,
+  },
+  footerImage: {
+    position: "absolute",
+    bottom: -325,
+    right: -225,
+  },
+  loginLogo: {
+    marginTop: -110,
+    alignSelf: "center",
   },
 });
