@@ -24,14 +24,13 @@ export default function SignUpScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = () => {
-    console.log(name, email, password, confirm);
     setIsLoading(true);
     firebase
       .auth()
-      .createUserWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email.trim(), password.trim())
       .then((userCredentials) =>
         userCredentials.user.updateProfile({
-          displayName: name,
+          displayName: name.trim(),
         })
       )
       .catch((error) => {

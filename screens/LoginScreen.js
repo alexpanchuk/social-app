@@ -23,7 +23,7 @@ export default function LoginScreen({ navigation }) {
     setIsLoading(true);
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(email.trim(), password.trim())
       .catch((error) => {
         setError(error.message);
       })
