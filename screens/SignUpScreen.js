@@ -1,7 +1,16 @@
 // 10:36
 
 import React, { useReducer, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  StatusBar,
+  LayoutAnimation,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { merge } from "ramda";
 import * as firebase from "firebase";
 import TextInputField from "../components/TextInputField";
@@ -33,9 +42,33 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greeting}>
-        Wellcome!{`\r\n`} Sign up to get started!
-      </Text>
+      <StatusBar barStyle="light-content" />
+      <Image
+        source={require("../assets/authHeader.png")}
+        style={styles.headerImage}
+      />
+      <Image
+        source={require("../assets/authFooter.png")}
+        style={styles.footerImage}
+      />
+      <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
+        <Ionicons name="ios-arrow-round-back" size={32} color="white" />
+      </TouchableOpacity>
+
+      <View style={styles.greetingContainer}>
+        <Text style={styles.greeting}>
+          Wellcome!{`\r\n`} Sign up to get started!
+        </Text>
+        <TouchableOpacity style={styles.avatar}>
+          <Ionicons
+            name="ios-add"
+            size={40}
+            color="#FFF"
+            style={{ marginTop: 6, marginLeft: 2 }}
+          />
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.error}>
         {errorMessage && (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
@@ -103,6 +136,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   form: {
+    marginTop: -52,
     marginBottom: 48,
     marginHorizontal: 30,
   },
@@ -128,5 +162,40 @@ const styles = StyleSheet.create({
   loginText: {
     fontWeight: "500",
     color: "#e9446a",
+  },
+  headerImage: {
+    marginTop: -136,
+    marginLeft: -50,
+  },
+  footerImage: {
+    position: "absolute",
+    bottom: -325,
+    right: -225,
+  },
+  back: {
+    position: "absolute",
+    top: 32,
+    left: 32,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(21, 22, 48, 0.1)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    backgroundColor: "#E1E2E6",
+    borderRadius: 50,
+    marginTop: 18,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  greetingContainer: {
+    position: "absolute",
+    top: 34,
+    alignItems: "center",
+    width: "100%",
   },
 });

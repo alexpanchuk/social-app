@@ -34,7 +34,7 @@ const AuthenticatedApp = () => (
 
 const UnauthenticatedApp = () => (
   <NavigationContainer>
-    <Main.Navigator headerMode="none" initialRouteName="Login">
+    <Main.Navigator headerMode="none">
       <Main.Screen name="SignUp" component={SignUpScreen} />
       <Main.Screen name="Login" component={LoginScreen} />
     </Main.Navigator>
