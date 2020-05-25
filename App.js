@@ -13,80 +13,85 @@ import NotificationScreen from "./screens/NotificationScreen";
 import PostScreen from "./screens/PostScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import useAuth from "./utils/hooks/useAuth";
-
-import * as firebase from "firebase";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAfOdUqWh4whZXQmSL6QmpPQybsvJqRQTs",
-  authDomain: "socialapp-3f52a.firebaseapp.com",
-  databaseURL: "https://socialapp-3f52a.firebaseio.com",
-  projectId: "socialapp-3f52a",
-  storageBucket: "socialapp-3f52a.appspot.com",
-  messagingSenderId: "765203656038",
-  appId: "1:765203656038:web:9fc4725161a4244d18aca7",
-};
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
-}
+import Fire from "./Fire";
+import "./utils/fixbugs/fixTimerBug.js";
+import "./utils/fixbugs/fixAtob.js";
 
 const Main = createStackNavigator();
+const RootStack = createStackNavigator();
 const AppTabs = createBottomTabNavigator();
+
 const getIcon = (name) => ({ color }) => (
   <Ionicons name={name} size={24} color={color} />
 );
 
-const AuthenticatedApp = () => (
-  <NavigationContainer>
-    <AppTabs.Navigator
-      tabBarOptions={{
-        activeTintColor: "#161f3d",
-        inactiveTintColor: "#b8bbc4",
-        showLabel: false,
+const MainStackScreen = () => (
+  <AppTabs.Navigator
+    tabBarOptions={{
+      activeTintColor: "#161f3d",
+      inactiveTintColor: "#b8bbc4",
+      showLabel: false,
+    }}
+  >
+    <AppTabs.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{ tabBarIcon: getIcon("ios-home") }}
+    />
+    <AppTabs.Screen
+      name="Message"
+      component={MessageScreen}
+      options={{ tabBarIcon: getIcon("ios-chatboxes") }}
+    />
+    <AppTabs.Screen
+      name="CustomNavigation"
+      component={PostScreen}
+      options={{
+        tabBarIcon: () => (
+          <Ionicons
+            name="ios-add-circle"
+            size={48}
+            color="#e9446a"
+            style={{
+              shadowColor: "#e9446a",
+              shadowOffset: { width: 0, height: 10 },
+              shadowRadius: 10,
+              shadowOpacity: 0.3,
+            }}
+          />
+        ),
+        tabBarVisible: false,
       }}
-    >
-      <AppTabs.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ tabBarIcon: getIcon("ios-home") }}
-      />
-      <AppTabs.Screen
-        name="Message"
-        component={MessageScreen}
-        options={{ tabBarIcon: getIcon("ios-chatboxes") }}
-      />
-      <AppTabs.Screen
-        name="Post"
-        component={PostScreen}
-        options={{
-          tabBarIcon: () => (
-            <Ionicons
-              name="ios-add-circle"
-              size={48}
-              color="#e9446a"
-              style={{
-                shadowColor: "#e9446a",
-                shadowOffset: { width: 0, height: 10 },
-                shadowRadius: 10,
-                shadowOpacity: 0.3,
-              }}
-            />
-          ),
-        }}
-      />
-      <AppTabs.Screen
-        name="Notification"
-        component={NotificationScreen}
-        options={{ tabBarIcon: getIcon("ios-notifications") }}
-      />
-      <AppTabs.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ tabBarIcon: getIcon("ios-person") }}
-      />
-    </AppTabs.Navigator>
-  </NavigationContainer>
+      listeners={({ navigation }) => ({
+        tabPress: (e) => {
+          e.preventDefault();
+          navigation.navigate("Post");
+        },
+      })}
+    />
+    <AppTabs.Screen
+      name="Notification"
+      component={NotificationScreen}
+      options={{ tabBarIcon: getIcon("ios-notifications") }}
+    />
+    <AppTabs.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{ tabBarIcon: getIcon("ios-person") }}
+    />
+  </AppTabs.Navigator>
 );
+
+function AuthenticatedApp() {
+  return (
+    <NavigationContainer>
+      <RootStack.Navigator mode="modal" headerMode="none">
+        <RootStack.Screen name="Main" component={MainStackScreen} />
+        <RootStack.Screen name="Post" component={PostScreen} />
+      </RootStack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 const UnauthenticatedApp = () => (
   <NavigationContainer>
