@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
-  LayoutAnimation,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { merge } from "ramda";
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     color: "#e9446a",
   },
   headerImage: {
-    marginTop: -136,
+    marginTop: Platform.OS === "web" ? 375 : -136,
     marginLeft: -50,
   },
   footerImage: {

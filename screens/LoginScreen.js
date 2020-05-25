@@ -9,6 +9,7 @@ import {
   Image,
   StatusBar,
   LayoutAnimation,
+  Platform,
 } from "react-native";
 import { merge } from "ramda";
 import TextInputField from "../components/TextInputField";
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     color: "#e9446a",
   },
   headerImage: {
-    marginTop: -216,
+    marginTop: Platform.OS === "web" ? 500 : -216,
     marginLeft: -50,
   },
   footerImage: {
