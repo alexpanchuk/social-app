@@ -53,9 +53,9 @@ export default function PostScreen({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    getPermissions();
-  }, []);
+  // useEffect(() => {
+  //   getPermissions();
+  // }, []);
 
   return (
     <SafeAreaView style={styles.container}>
