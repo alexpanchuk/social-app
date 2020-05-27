@@ -9,7 +9,7 @@ class Fire {
   }
 
   addPost = async ({ text, localUri }) => {
-    const remoteUri = await this.uploadPhotoAsync(localUri);
+    const remoteUri = localUri && (await this.uploadPhotoAsync(localUri));
 
     return new Promise((res, rej) => {
       this.firestore
@@ -29,20 +29,24 @@ class Fire {
     const path = `photos/${this.uid}/${Date.now()}.jpg`;
 
     return new Promise(async (res, rej) => {
-      const response = await fetch(uri);
-      const file = await response.blob();
+      try {
+        const response = await fetch(uri);
+        const file = await response.blob();
 
-      let upload = firebase.storage().ref(path).put(file);
+        let upload = firebase.storage().ref(path).put(file);
 
-      upload.on(
-        "state_changed",
-        () => {},
-        rej,
-        async () => {
-          const url = await upload.snapshot.ref.getDownloadURL();
-          res(url);
-        }
-      );
+        upload.on(
+          "state_changed",
+          () => {},
+          rej,
+          async () => {
+            const url = await upload.snapshot.ref.getDownloadURL();
+            res(url);
+          }
+        );
+      } catch (error) {
+        rej(error);
+      }
     });
   };
 
