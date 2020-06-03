@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import Fire from "../Fire";
+import UserPermissions from "../utils/UserPermissions";
 
 const firebase = require("firebase");
 require("firebase/firestore");
@@ -19,14 +20,6 @@ require("firebase/firestore");
 export default function PostScreen({ navigation }) {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
-
-  const getPermissions = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-    if (status !== "granted") {
-      alert("We need permission to access your camera roll.");
-    }
-  };
 
   const handlePost = () => {
     Fire.shared
@@ -54,7 +47,7 @@ export default function PostScreen({ navigation }) {
   };
 
   useEffect(() => {
-    getPermissions();
+    UserPermissions.getCameraPermission();
   }, []);
 
   return (
