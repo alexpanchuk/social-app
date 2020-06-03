@@ -4,7 +4,7 @@ This project was bootstraped with [Expo](https://github.com/expo/expo)
 
 Little Social App, built as a [React Native](https://reactnative.dev/) playground
 
-### Implemented feature
+### Implemented features
 
 - Authentication
 - Creating post
