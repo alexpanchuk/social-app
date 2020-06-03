@@ -7,7 +7,7 @@ export default function useAuth() {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      if (isLoading) setIsLoading(false);
+      setIsLoading(false);
       setIsLoggedIn(Boolean(user));
     });
   }, []);
