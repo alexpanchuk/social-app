@@ -27,8 +27,7 @@ export default function LoginScreen({ navigation }) {
       .signInWithEmailAndPassword(email.trim(), password.trim())
       .catch((error) => {
         setError(error.message);
-      })
-      .finally(() => setIsLoading(false));
+      });
   };
 
   LayoutAnimation.easeInEaseOut();
