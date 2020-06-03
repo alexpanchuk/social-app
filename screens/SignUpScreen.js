@@ -1,5 +1,3 @@
-// 10:36
-
 import React, { useReducer, useState } from "react";
 import {
   StyleSheet,
@@ -12,31 +10,34 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { merge } from "ramda";
-import * as firebase from "firebase";
 import TextInputField from "../components/TextInputField";
+import * as ImagePicker from "expo-image-picker";
+import UserPermissions from "../utils/UserPermissions";
+import Fire from "../Fire";
 
 export default function SignUpScreen({ navigation }) {
-  const [{ name = "", email = "", password = "" }, setFormData] = useReducer(
-    merge,
-    {}
-  );
+  const [user, setFormData] = useReducer(merge, {});
+  const { name = "", email = "", password = "", avatar = "" } = user;
   const [errorMessage, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const handlePicAvatar = async () => {
+    UserPermissions.getCameraPermission();
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [3, 3],
+    });
+
+    if (!result.cancelled) {
+      setFormData({ avatar: result.uri });
+    }
+  };
+
+  const handleSubmit = async () => {
     setIsLoading(true);
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email.trim(), password.trim())
-      .then((userCredentials) =>
-        userCredentials.user.updateProfile({
-          displayName: name.trim(),
-        })
-      )
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => setIsLoading(false));
+    await Fire.shared.createUser(user);
   };
 
   return (
@@ -58,13 +59,20 @@ export default function SignUpScreen({ navigation }) {
         <Text style={styles.greeting}>
           Wellcome!{`\r\n`} Sign up to get started!
         </Text>
-        <TouchableOpacity style={styles.avatar}>
-          <Ionicons
-            name="ios-add"
-            size={40}
-            color="#FFF"
-            style={{ marginTop: 6, marginLeft: 2 }}
-          />
+        <TouchableOpacity
+          style={styles.avatarPlaceholder}
+          onPress={handlePicAvatar}
+        >
+          {avatar ? (
+            <Image source={{ uri: avatar }} style={styles.avatar} />
+          ) : (
+            <Ionicons
+              name="ios-add"
+              size={40}
+              color="#FFF"
+              style={{ marginTop: 6, marginLeft: 2 }}
+            />
+          )}
         </TouchableOpacity>
       </View>
 
@@ -183,6 +191,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   avatar: {
+    position: "absolute",
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  avatarPlaceholder: {
     width: 100,
     height: 100,
     backgroundColor: "#E1E2E6",
